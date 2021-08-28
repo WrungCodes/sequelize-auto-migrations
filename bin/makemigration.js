@@ -17,7 +17,8 @@ const optionDefinitions = [
     { name: 'execute', alias: 'x', type: Boolean, description: 'Create new migration and execute it' },
     { name: 'migrations-path', type: String, description: 'The path to the migrations folder' },
     { name: 'models-path', type: String, description: 'The path to the models folder' },
-    { name: 'help', type: Boolean, description: 'Show this message' }
+    { name: 'help', type: Boolean, description: 'Show this message' },
+    { name: 'environment', type: String, description: 'The environment to use ("sandbox" || "live")' },
 ];
 
 const options = commandLineArgs(optionDefinitions);
@@ -69,8 +70,7 @@ try {
 } catch (e) { }
 
 //console.log(path.join(migrationsDir, '_current.json'), JSON.parse(fs.readFileSync(path.join(migrationsDir, '_current.json') )))
-let sequelize = require(modelsDir).sequelize;
-
+let sequelize = require(modelsDir)({environment: options.environment}).sequelize;
 let models = sequelize.models;
 
 currentState.tables = migrate.reverseModels(sequelize, models);
