@@ -17,7 +17,8 @@ const optionDefinitions = [
     { name: 'list', alias: 'l', type: Boolean, description: 'Show migration file list (without execution)', defaultValue: false },
     { name: 'migrations-path', type: String, description: 'The path to the migrations folder' },
     { name: 'models-path', type: String, description: 'The path to the models folder' },
-    { name: 'help', type: Boolean, description: 'Show this message' }
+    { name: 'help', type: Boolean, description: 'Show this message' },
+    { name: 'environment', type: String, description: 'The environment to use ("sandbox" || "live")' },
 ];
 
 const options = commandLineArgs(optionDefinitions);
@@ -52,7 +53,7 @@ if (options.help)
     process.exit(0);
 }
 
-const sequelize = require(modelsDir).sequelize;
+const sequelize = require(modelsDir)({environment: options.environment}).sequelize;
 const queryInterface = sequelize.getQueryInterface();
 
 // execute all migration from
